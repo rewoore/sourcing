@@ -15,4 +15,7 @@ import { ipcRenderer, contextBridge } from 'electron';
     saveConfig: (config: any) => ipcRenderer.invoke('save-config', config),
     // Custom Proxy
     searchIcons: (params: any) => ipcRenderer.invoke('search-icons', params),
+    // Platform Bridge Bindings
+    saveFile: (content: string, filename: string) => ipcRenderer.invoke('save-file', content, filename),
+    readFile: () => ipcRenderer.invoke('read-file'),
 };

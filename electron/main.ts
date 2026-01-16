@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'node:path';
 import fs from 'node:fs';
 import OAuth from 'oauth-1.0a';
@@ -60,6 +60,31 @@ ipcMain.handle('save-config', async (event, config) => {
     console.error('Error saving config:', err);
     return false;
   }
+});
+
+ipcMain.handle('save-file', async (event, content: string, filename: string) => {
+  const { filePath } = await dialog.showSaveDialog({
+    defaultPath: filename,
+    filters: [{ name: 'Project Files', extensions: ['json'] }]
+  });
+
+  if (filePath) {
+    fs.writeFileSync(filePath, content, 'utf8');
+    return true;
+  }
+  return false;
+});
+
+ipcMain.handle('read-file', async () => {
+  const { filePaths } = await dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [{ name: 'Project Files', extensions: ['json'] }]
+  });
+
+  if (filePaths && filePaths.length > 0) {
+    return fs.readFileSync(filePaths[0], 'utf8');
+  }
+  return null;
 });
 
 // Noun Project Proxy
