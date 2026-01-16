@@ -15,5 +15,8 @@ window.electronAPI = {
     saveConfig: (config) => electron_1.ipcRenderer.invoke('save-config', config),
     // Custom Proxy
     searchIcons: (params) => electron_1.ipcRenderer.invoke('search-icons', params),
+    // Platform Bridge Bindings
+    saveFile: (content, filename) => electron_1.ipcRenderer.invoke('save-file', content, filename),
+    readFile: () => electron_1.ipcRenderer.invoke('read-file'),
 };
 //# sourceMappingURL=preload.js.map

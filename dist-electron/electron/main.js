@@ -70,6 +70,27 @@ electron_1.ipcMain.handle('save-config', (event, config) => __awaiter(void 0, vo
         return false;
     }
 }));
+electron_1.ipcMain.handle('save-file', (event, content, filename) => __awaiter(void 0, void 0, void 0, function* () {
+    const { filePath } = yield electron_1.dialog.showSaveDialog({
+        defaultPath: filename,
+        filters: [{ name: 'Project Files', extensions: ['json'] }]
+    });
+    if (filePath) {
+        node_fs_1.default.writeFileSync(filePath, content, 'utf8');
+        return true;
+    }
+    return false;
+}));
+electron_1.ipcMain.handle('read-file', () => __awaiter(void 0, void 0, void 0, function* () {
+    const { filePaths } = yield electron_1.dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [{ name: 'Project Files', extensions: ['json'] }]
+    });
+    if (filePaths && filePaths.length > 0) {
+        return node_fs_1.default.readFileSync(filePaths[0], 'utf8');
+    }
+    return null;
+}));
 // Noun Project Proxy
 electron_1.ipcMain.handle('search-icons', (event_1, _a) => __awaiter(void 0, [event_1, _a], void 0, function* (event, { query, key, secret }) {
     if (!key || !secret)
